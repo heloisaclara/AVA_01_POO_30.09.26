@@ -1,8 +1,15 @@
 from __future__ import annotations
 from datetime import date
 
+
 # Implemente sua classe Medicamento aqui
-#B de Heloisa)
+#(A, B e E de Heloisa)
+class QuantidadeInvalidaError(Exception):
+    pass
+
+class MedicamentoVencidoError(Exception):
+    pass
+
 class Medicamento: 
 
     def __init__(self, nome: str, lote: str, validade: date, quantidade: int, valor: float) -> None:
@@ -59,19 +66,21 @@ class Medicamento:
             return NotImplemented
         return self.nome == outro.nome and self.lote == outro.lote
 
-    # Define o critério de comparação (ordenação por data de validade)
-    def __lt__(self, outro: "Medicamento") -> bool:
+    def __lt__(self, outro: Medicamento) -> bool:
         return self.validade < outro.validade
 
-medicamentos = [
-    Medicamento("Paracetamol", date(2025, 12, 1)),
-    Medicamento("Dipirona", date(2024, 5, 20)),
-    Medicamento("Ibuprofeno", date(2025, 1, 15)),
-]
+    def dispensar(self, quantidade: int) -> None:
+        if quantidade <= 0 or quantidade > self.quantidade:
+            raise QuantidadeInvalidaError("quantidade invalida para dispensar.")
+        if  self.validade < date.today():
+            raise MedicamentoVencidoError("medicamento vencido.")
+        self.quantidade -= quantidade
 
-for m in sorted(medicamentos):
-    print(m)
-    
+    def repor(self, quantidade: int) -> None:
+        if quantidade <= 0:
+            raise ValueError("quantidade de reposição deve ser maior que zero.")
+        self.quantidade += quantidade            
+
 
 #============================================================================================================
 if __name__ == "__main__":
@@ -110,4 +119,11 @@ if __name__ == "__main__":
     except ValueError as erro:
         print(f"Erro esperado: {erro}")
 
-    
+    print("\nTestando lista extra de medicamentos:")
+    medicamentos = [
+        Medicamento("Paracetamol", "L001", date(2025, 12, 1), 50, 10.0),
+        Medicamento("Dipirona", "L002", date(2024, 5, 20), 100, 5.5),
+        Medicamento("Ibuprofeno", "L003", date(2025, 1, 15), 30, 15.0),
+    ]
+    for m in sorted(medicamentos):
+        print(m)
