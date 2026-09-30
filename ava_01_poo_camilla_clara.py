@@ -2,6 +2,37 @@ from __future__ import annotations
 from datetime import date
 
 # Implemente sua classe Medicamento aqui
+#B de Heloisa)
+class Medicamento: 
+
+    def __init__(self, nome: str, lote: str, validade: date, quantidade: int, valor: float) -> None:
+        self.nome: str = nome
+        self.lote: str = lote
+        self.validade: date = validade
+        self.quantidade = quantidade 
+        self.valor = valor
+
+    @property
+    def quantidade(self) -> int:
+        return self._quantidade 
+    
+    @quantidade.setter
+    def quantidade(self, nova_quantidade: int) -> None:
+        if nova_quantidade < 0:
+            raise ValueError("a quantidade não pode ser negativa.")
+        self._quantidade = nova_quantidade
+    
+    @property
+    def valor(self) -> float:
+        return self._valor
+    
+    @valor.setter
+    def valor(self, nome_valor: float) -> None:
+        if nome_valor <= 0:
+            raise ValueError("o valor deve ser maior que zero.")
+        self._valor = nome_valor
+
+#============================================================================================================
 if __name__ == "__main__":
     m1 = Medicamento("Dipirona 500mg", "L2026A", date(2026, 12, 31), 100, 12.50)
     m2 = Medicamento.de_registro("Amoxicilina 500mg;L2026B;2026-10-15;40;18.90")
