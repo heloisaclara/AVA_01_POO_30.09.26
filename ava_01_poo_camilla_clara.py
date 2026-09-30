@@ -37,3 +37,33 @@ if __name__ == "__main__":
         m1.quantidade = -5
     except ValueError as erro:
         print(f"Erro esperado: {erro}")
+
+    @classmethod
+    def de_registro(cls, dados: str) -> Medicamento:
+        nome, lote, validade_str, qtd_str, valor_str = dados.split(";")
+        return cls(
+            nome.strip(),
+            lote.strip(),
+            date.fromisoformat(validade_str.strip()),
+            int(qtd_str.strip()),
+            float(valor_str.strip())
+        )
+
+    @staticmethod
+    def dias_para_vencer(validade: date) -> int:
+        return (validade - date.today()).days
+
+    def __str__(self) -> str:
+        data_fmt = self.validade.strftime("%d/%m/%Y")
+        return f"{self.nome} ({self.lote}) {self.quantidade} un. val. {data_fmt}"
+
+    def __repr__(self) -> str:
+        return f"Medicamento(nome={self.nome!r}, lote={self.lote!r}, validade={self.validade!r}, quantidade={self.quantidade}, valor={self.valor})"
+
+    def __eq__(self, outro: object) -> bool:
+        if not isinstance(outro, Medicamento):
+            return NotImplemented
+        return self.nome == outro.nome and self.lote == outro.lote
+
+    def __lt__(self, outro: Medicamento) -> bool:
+        return self.validade < outro.validade
