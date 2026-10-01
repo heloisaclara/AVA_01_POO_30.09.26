@@ -26,7 +26,7 @@ class Medicamento:
     @quantidade.setter
     def quantidade(self, nova_quantidade: int) -> None:
         if nova_quantidade < 0:
-            raise ValueError("a quantidade não pode ser negativa.")
+            raise ValueError(f"a quantidade não pode ser negativa.")
         self._quantidade = nova_quantidade
     
     @property
@@ -36,7 +36,7 @@ class Medicamento:
     @valor.setter
     def valor(self, nome_valor: float) -> None:
         if nome_valor <= 0:
-            raise ValueError("o valor deve ser maior que zero.")
+            raise ValueError(f"o valor deve ser maior que zero.")
         self._valor = nome_valor
 
     @classmethod
@@ -71,14 +71,14 @@ class Medicamento:
 
     def dispensar(self, quantidade: int) -> None:
         if quantidade <= 0 or quantidade > self.quantidade:
-            raise QuantidadeInvalidaError("quantidade invalida para dispensar.")
+            raise QuantidadeInvalidaError(f"quantidade invalida para dispensar: {quantidade}")
         if  self.validade < date.today():
-            raise MedicamentoVencidoError("medicamento vencido.")
+            raise MedicamentoVencidoError(f"medicamento vencido.")
         self.quantidade -= quantidade
 
     def repor(self, quantidade: int) -> None:
         if quantidade <= 0:
-            raise ValueError("quantidade de reposição deve ser maior que zero.")
+            raise ValueError(f"quantidade de reposição deve ser maior que zero.")
         self.quantidade += quantidade            
 
 
